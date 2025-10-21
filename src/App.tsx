@@ -16,6 +16,8 @@ function App() {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
+
+      <textarea rows={10} className={styles.textareaOutput} value={text} readOnly />
     </div>
   );
 }
