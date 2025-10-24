@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './App.module.css';
+import Button from './components/Button';
 
 const convertToHohokekyo = (originalText: string): string => {
   if (!originalText) {
@@ -27,10 +28,16 @@ const convertToHohokekyo = (originalText: string): string => {
 function App() {
   const [text, setText] = useState<string>('');
   const convertedText = convertToHohokekyo(text);
+  const handleCopyClick = () => {
+    if (!convertedText) return;
+
+    navigator.clipboard.writeText(convertedText);
+    alert('コピーしました！');
+  };
 
   return (
     <div className={styles.container}>
-      <h1>テキスト入力エリア</h1>
+      <h1>可逆ホーホケキョ語メモ</h1>
       <p>自由に入力してください。</p>
 
       <textarea
@@ -40,6 +47,11 @@ function App() {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
+
+      <div className={styles.buttonGroup}>
+        <Button onClick={handleCopyClick}>コピー</Button>
+        <Button onClick={() => setText('')}>クリア</Button>
+      </div>
 
       <textarea rows={10} className={styles.textareaOutput} value={convertedText} readOnly />
     </div>
