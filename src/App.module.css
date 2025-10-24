@@ -54,3 +54,13 @@ h1 {
 .textareaOutput:focus {
   outline: none;
 }
+
+.converterContainer {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+}
+
+.converterSection {
+  flex: 1;
+}

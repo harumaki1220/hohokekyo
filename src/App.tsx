@@ -25,12 +25,31 @@ const convertToHohokekyo = (originalText: string): string => {
   return encodedChars.join('ー');
 };
 
+const convertFromHohokekyo = (hohokekyoText: string): string => {
+  if (!hohokekyoText) {
+    return '';
+  }
+  const encodedChars = hohokekyoText.split('ー');
+  const decodedChars = encodedChars.map((hohokekyoString) => {
+    const base3String = hohokekyoString
+      .replace(/ホ/g, '0')
+      .replace(/ケ/g, '1')
+      .replace(/キョ/g, '2');
+    const charCode = parseInt(base3String, 3);
+    return String.fromCharCode(charCode);
+  });
+  return decodedChars.join('');
+};
+
 function App() {
   const [text, setText] = useState<string>('');
   const convertedText = convertToHohokekyo(text);
+
+  const [hohoText, setHohoText] = useState('');
+  const decodedText = convertFromHohokekyo(hohoText);
+
   const handleCopyClick = () => {
     if (!convertedText) return;
-
     navigator.clipboard.writeText(convertedText);
     alert('コピーしました！');
   };
@@ -38,22 +57,40 @@ function App() {
   return (
     <div className={styles.container}>
       <h1>可逆ホーホケキョ語メモ</h1>
-      <p>自由に入力してください。</p>
 
-      <textarea
-        rows={10}
-        placeholder="ここに文字を入力..."
-        className={styles.textarea}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
+      <div className={styles.converterContainer}>
+        <div className={styles.converterSection}>
+          <h2>日本語 → ホーホケキョ語</h2>
+          <textarea
+            rows={10}
+            placeholder="ここに文字を入力..."
+            className={styles.textarea}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </div>
+      </div>
 
       <div className={styles.buttonGroup}>
         <Button onClick={handleCopyClick}>コピー</Button>
         <Button onClick={() => setText('')}>クリア</Button>
       </div>
-
       <textarea rows={10} className={styles.textareaOutput} value={convertedText} readOnly />
+
+      <div className={styles.converterSection}>
+        <h2>ホーホケキョ語 → 日本語</h2>
+        <textarea
+          rows={10}
+          placeholder="ここにホーホケキョ語を入力..."
+          className={styles.textarea}
+          value={hohoText}
+          onChange={(e) => setHohoText(e.target.value)}
+        />
+        <div className={styles.buttonGroup}>
+          <Button onClick={() => setHohoText('')}>クリア</Button>
+        </div>
+        <textarea rows={10} className={styles.textareaOutput} value={decodedText} readOnly />
+      </div>
     </div>
   );
 }
