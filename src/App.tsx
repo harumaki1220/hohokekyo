@@ -44,20 +44,33 @@ const convertFromHohokekyo = (hohokekyoText: string): string => {
 function App() {
   const [text, setText] = useState<string>('');
   const convertedText = convertToHohokekyo(text);
+  const [showCopied, setShowCopied] = useState(false);
 
   const [hohoText, setHohoText] = useState('');
   const decodedText = convertFromHohokekyo(hohoText);
+  const [showCopiedHoho, setShowCopiedHoho] = useState(false);
 
-  const handleCopyClick = () => {
+  const handleCopy = () => {
     if (!convertedText) return;
     navigator.clipboard.writeText(convertedText);
-    alert('コピーしました！');
+    setShowCopied(true);
+    setTimeout(() => {
+      setShowCopied(false);
+    }, 1500);
+  };
+
+  const handleCopyHoho = () => {
+    if (!decodedText) return;
+    navigator.clipboard.writeText(decodedText);
+    setShowCopiedHoho(true);
+    setTimeout(() => {
+      setShowCopiedHoho(true);
+    }, 1500);
   };
 
   return (
     <div className={styles.container}>
       <h1>可逆ホーホケキョ語メモ</h1>
-
       <div className={styles.converterContainer}>
         <div className={styles.converterSection}>
           <h2>日本語 → ホーホケキョ語</h2>
@@ -68,28 +81,30 @@ function App() {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
+          <div className={styles.buttonGroup}>
+            <Button onClick={handleCopy}>コピー</Button>
+            <Button onClick={() => setText('')}>クリア</Button>
+            {showCopied && <div className={styles.copiedMessage}>Copied!</div>}
+          </div>
+          <textarea rows={10} className={styles.textareaOutput} value={convertedText} readOnly />
         </div>
-      </div>
 
-      <div className={styles.buttonGroup}>
-        <Button onClick={handleCopyClick}>コピー</Button>
-        <Button onClick={() => setText('')}>クリア</Button>
-      </div>
-      <textarea rows={10} className={styles.textareaOutput} value={convertedText} readOnly />
-
-      <div className={styles.converterSection}>
-        <h2>ホーホケキョ語 → 日本語</h2>
-        <textarea
-          rows={10}
-          placeholder="ここにホーホケキョ語を入力..."
-          className={styles.textarea}
-          value={hohoText}
-          onChange={(e) => setHohoText(e.target.value)}
-        />
-        <div className={styles.buttonGroup}>
-          <Button onClick={() => setHohoText('')}>クリア</Button>
+        <div className={styles.converterSection}>
+          <h2>ホーホケキョ語 → 日本語</h2>
+          <textarea
+            rows={10}
+            placeholder="ここにホーホケキョ語を入力..."
+            className={styles.textarea}
+            value={hohoText}
+            onChange={(e) => setHohoText(e.target.value)}
+          />
+          <div className={styles.buttonGroup}>
+            <Button onClick={handleCopyHoho}>コピー</Button>
+            <Button onClick={() => setHohoText('')}>クリア</Button>
+            {showCopiedHoho && <div className={styles.copiedMessage}>Copied!</div>}
+          </div>
+          <textarea rows={10} className={styles.textareaOutput} value={decodedText} readOnly />
         </div>
-        <textarea rows={10} className={styles.textareaOutput} value={decodedText} readOnly />
       </div>
     </div>
   );
