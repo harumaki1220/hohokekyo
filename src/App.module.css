@@ -77,15 +77,14 @@ h1 {
 .copiedMessage {
   position: absolute;
   top: 100%;
-  right: 0;
   margin-top: 8px;
-  background-color: #2d3748;
+  background-color: #25292e;
   color: white;
   padding: 6px 12px;
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 600;
-
+  z-index: 10;
   animation: fadeInout 1.5s ease-out;
 }
 

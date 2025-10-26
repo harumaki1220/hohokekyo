@@ -64,7 +64,7 @@ function App() {
     navigator.clipboard.writeText(decodedText);
     setShowCopiedHoho(true);
     setTimeout(() => {
-      setShowCopiedHoho(true);
+      setShowCopiedHoho(false);
     }, 1500);
   };
 
