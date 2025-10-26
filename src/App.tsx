@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from './App.module.css';
 import Button from './components/Button';
 
@@ -50,22 +50,37 @@ function App() {
   const decodedText = convertFromHohokekyo(hohoText);
   const [showCopiedHoho, setShowCopiedHoho] = useState(false);
 
+  const timerRef = useRef<number | null>(null);
+  const timerRefHoho = useRef<number | null>(null);
+
   const handleCopy = () => {
     if (!convertedText) return;
     navigator.clipboard.writeText(convertedText);
-    setShowCopied(true);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    setShowCopied(false);
     setTimeout(() => {
-      setShowCopied(false);
-    }, 1500);
+      setShowCopied(true);
+      timerRef.current = setTimeout(() => {
+        setShowCopied(false);
+      }, 1500);
+    }, 10);
   };
 
   const handleCopyHoho = () => {
     if (!decodedText) return;
     navigator.clipboard.writeText(decodedText);
-    setShowCopiedHoho(true);
+    if (timerRefHoho.current) {
+      clearTimeout(timerRefHoho.current);
+    }
+    setShowCopiedHoho(false);
     setTimeout(() => {
-      setShowCopiedHoho(false);
-    }, 1500);
+      setShowCopiedHoho(true);
+      timerRefHoho.current = setTimeout(() => {
+        setShowCopiedHoho(false);
+      }, 1500);
+    }, 10);
   };
 
   return (
