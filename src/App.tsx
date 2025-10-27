@@ -64,6 +64,7 @@ function App() {
       setShowCopied(true);
       timerRef.current = setTimeout(() => {
         setShowCopied(false);
+        timerRef.current = null;
       }, 1500);
     }, 10);
   };
@@ -79,6 +80,7 @@ function App() {
       setShowCopiedHoho(true);
       timerRefHoho.current = setTimeout(() => {
         setShowCopiedHoho(false);
+        timerRefHoho.current = null;
       }, 1500);
     }, 10);
   };
